@@ -4,6 +4,175 @@ import { sql } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { formatISODate } from "@/utils/dates";
 
+// ─── GROQ AI API MOCK INTERCEPTOR ─────────────────────────────────────
+const originalFetch = globalThis.fetch;
+
+function getMockMenu(mealMode: string) {
+    const days = [0, 1, 2, 3, 4, 5, 6];
+    const meals: any[] = [];
+    
+    const lunchPool = [
+        { title: "Primo: Risotto allo Zafferano | Secondo: Scaloppina al Limone", desc: "Contorno: Asparagi al vapore — Risotto cremoso e fettine di vitello al limone.", notes: "Leggero e primaverile." },
+        { title: "Primo: Spaghetti alle Vongole | Secondo: Merluzzo alla Griglia", desc: "Contorno: Insalatina di finocchi — Spaghetti freschi alle vongole e filetto di merluzzo con olio e limone.", notes: "Molto fresco." },
+        { title: "Primo: Pennette all'Arrabbiata | Secondo: Uovo al Tegamino", desc: "Contorno: Spinaci al burro — Pasta al pomodoro piccante e uova fresche al tegamino.", notes: "Rapido e saporito." },
+        { title: "Primo: Pasta e Fagioli | Secondo: Formaggio Fresco", desc: "Contorno: Carotine saltate — Zuppa tradizionale di fagioli borlotti e formaggio tipo caciotta fresca.", notes: "Pasto nutriente e tradizionale." },
+        { title: "Primo: Gnocchi alla Sorrentina | Secondo: Spiedini di Pollo", desc: "Contorno: Zucchine grigliate — Gnocchi al pomodoro e mozzarella filante con spiedini di pollo grigliati.", notes: "Molto amato dai bambini." },
+        { title: "Primo: Riso Rosso con Verdure | Secondo: Torta Salata", desc: "Contorno: Pomodori all'insalata — Riso integrale saltato con verdure miste e fetta di torta salata ricotta e spinaci.", notes: "Piatto unico vegetariano." },
+        { title: "Primo: Lasagne Leggere alle Zucchine | Secondo: Prosciutto Crudo", desc: "Contorno: Insalata mista — Lasagna bianca con zucchine e scamorza abbinata a crudo dolce.", notes: "Perfetto per la domenica in famiglia." }
+    ];
+
+    const dinnerPool = [
+        { title: "Primo: Vellutata di Piselli | Secondo: Petto di Pollo alla Piastra", desc: "Contorno: Fagiolini all'agro — Vellutata tiepida con crostini e petto di pollo aromatizzato alle erbe.", notes: "Cena detox e proteica." },
+        { title: "Primo: Tortiglioni al Ragù Bianco | Secondo: Polpette al Sugo", desc: "Contorno: Melanzane a funghetto — Pasta condita con trito di verdure e carne, e polpettine classiche.", notes: "Molto sostanzioso." },
+        { title: "Primo: Zuppa di Farro e Lenticchie | Secondo: Mozzarella di Bufala", desc: "Contorno: Bieta ripassata — Zuppa tiepida di legumi e farro abbinata a mozzarella fresca.", notes: "Ricco di fibre e proteine." },
+        { title: "Primo: Pasta alla Carbonara di Zucchine | Secondo: Frittata di Patate", desc: "Contorno: Insalata verde — Pasta con crema di zucchine e uovo, e soffice frittata.", notes: "Alternativa vegetariana alla carbonara." },
+        { title: "Primo: Cous Cous di Pesce | Secondo: Polipo all'insalata", desc: "Contorno: Verdure al forno — Semola cotta al vapore con brodo di pesce e insalata di polpo tiepida.", notes: "Sapore di mare." },
+        { title: "Primo: Crema di Zucca e Zenzero | Secondo: Salmone al Cartoccio", desc: "Contorno: Patate al forno — Crema saporita e trancio di salmone cotto al cartoccio con aromi.", notes: "Ricco di Omega-3." },
+        { title: "Primo: Minestrone Estivo | Secondo: Frittata con Erbe Spontanee", desc: "Contorno: Verdure grigliate — Minestrone leggero con verdure fresche e frittata alle erbe.", notes: "Semplice e genuino." }
+    ];
+
+    for (const day of days) {
+        if (mealMode === "both" || mealMode === "lunch") {
+            const p = lunchPool[day % lunchPool.length];
+            meals.push({
+                day_of_week: day,
+                meal_type: "lunch",
+                title: p.title,
+                description: p.desc,
+                notes: p.notes
+            });
+        }
+        if (mealMode === "both" || mealMode === "dinner") {
+            const p = dinnerPool[day % dinnerPool.length];
+            meals.push({
+                day_of_week: day,
+                meal_type: "dinner",
+                title: p.title,
+                description: p.desc,
+                notes: p.notes
+            });
+        }
+        if (mealMode === "smart_mix") {
+            const isWeekday = day >= 0 && day <= 4;
+            if (isWeekday) {
+                const p = dinnerPool[day % dinnerPool.length];
+                meals.push({
+                    day_of_week: day,
+                    meal_type: "dinner",
+                    title: p.title,
+                    description: p.desc,
+                    notes: p.notes
+                });
+            } else {
+                const l = lunchPool[day % lunchPool.length];
+                meals.push({
+                    day_of_week: day,
+                    meal_type: "lunch",
+                    title: l.title,
+                    description: l.desc,
+                    notes: l.notes
+                });
+                const d = dinnerPool[day % dinnerPool.length];
+                meals.push({
+                    day_of_week: day,
+                    meal_type: "dinner",
+                    title: d.title,
+                    description: d.desc,
+                    notes: d.notes
+                });
+            }
+        }
+    }
+    return { meals };
+}
+
+globalThis.fetch = async function(input: RequestInfo | URL, init?: RequestInit) {
+    const isMock = process.env.GROQ_API_KEY?.includes("placeholder") || !process.env.GROQ_API_KEY;
+    if (isMock && typeof input === "string" && input.includes("api.groq.com")) {
+        console.log("🎮 Intercepted Groq Fetch call! Simulating AI Response...");
+        const body = JSON.parse(init?.body as string);
+        const systemPrompt = body.messages.find((m: any) => m.role === "system")?.content || "";
+        
+        let responseContent = "";
+        
+        if (systemPrompt.includes("categorie merceologiche") || systemPrompt.includes("LISTA DELLA SPESA CONSOLIDATA")) {
+            responseContent = JSON.stringify({
+                categories: [
+                    {
+                        categoryName: "Ortofrutta (Frutta e Verdura)",
+                        items: [
+                            { name: "Zucchine fresche", quantity: "2 kg" },
+                            { name: "Patate", quantity: "1.5 kg" },
+                            { name: "Insalata mista", quantity: "500 g" },
+                            { name: "Asparagi", quantity: "800 g" },
+                            { name: "Pomodorini", quantity: "1 kg" }
+                        ]
+                    },
+                    {
+                        categoryName: "Macelleria e Pescheria",
+                        items: [
+                            { name: "Petto di pollo", quantity: "1.2 kg" },
+                            { name: "Fettine di vitello", quantity: "800 g" },
+                            { name: "Tranci di salmone", quantity: "5 porzioni (circa 900g)" },
+                            { name: "Merluzzo fresco", quantity: "700 g" }
+                        ]
+                    },
+                    {
+                        categoryName: "Latticini e Uova",
+                        items: [
+                            { name: "Mozzarella di bufala", quantity: "5 pezzi da 125g" },
+                            { name: "Parmigiano Reggiano grattugiato", quantity: "300 g" },
+                            { name: "Uova fresche grandi", quantity: "12 uova" },
+                            { name: "Ricotta vaccina", quantity: "500 g" }
+                        ]
+                    },
+                    {
+                        categoryName: "Dispensa (Pasta, Riso, Condimenti)",
+                        items: [
+                            { name: "Spaghetti di semola", quantity: "1 kg" },
+                            { name: "Riso Carnaroli", quantity: "750 g" },
+                            { name: "Passata di pomodoro", quantity: "3 bottiglie da 700g" },
+                            { name: "Olio Extravergine d'Oliva", quantity: "500 ml" }
+                        ]
+                    }
+                ],
+                notes: "Consiglio antispreco: usa le zucchine sia per il risotto che grigliate per ottimizzare l'acquisto del pacco da 2kg!"
+            });
+        } else if (systemPrompt.includes("consigliare un SINGOLO pasto") || systemPrompt.includes("pasto sostitutivo")) {
+            const mockMeals = [
+                { title: "Primo: Spaghetti alla Nerano | Secondo: Cotoletta di Pollo", description: "Contorno: Zucchine fritte e basilico — Pasta mantecata con provolone del monaco e petto di pollo panato e fritto dorato.", notes: "Specialità campana irresistibile." },
+                { title: "Primo: Risotto ai Funghi Porcini | Secondo: Arista di Maiale", description: "Contorno: Patate prezzemolate — Riso mantecato con porcini freschi e arista di maiale cotta al forno con aromi.", notes: "Classico sapore autunnale." },
+                { title: "Primo: Mezze Maniche all'Amatriciana | Secondo: Straccetti di Manzo", description: "Contorno: Rucola e scaglie di grana — Pasta con sugo di pomodoro, guanciale croccante e pecorino, abbinata a straccetti saltati in padella.", notes: "Cena romana doc." }
+            ];
+            responseContent = JSON.stringify(mockMeals[Math.floor(Math.random() * mockMeals.length)]);
+        } else {
+            let mealMode = "both";
+            if (systemPrompt.includes("Solo Pranzo")) mealMode = "lunch";
+            else if (systemPrompt.includes("Solo Cena")) mealMode = "dinner";
+            else if (systemPrompt.includes("Mix Intelligente")) mealMode = "smart_mix";
+            
+            responseContent = JSON.stringify(getMockMenu(mealMode));
+        }
+
+        return {
+            ok: true,
+            status: 200,
+            json: async () => ({
+                choices: [
+                    {
+                        message: {
+                            content: responseContent
+                        }
+                    }
+                ]
+            }),
+            text: async () => JSON.stringify({ choices: [{ message: { content: responseContent } }] })
+        } as unknown as Response;
+    }
+    return originalFetch(input, init);
+};
+// ──────────────────────────────────────────────────────────────────────
+
 interface ActionResponse {
     success: boolean;
     error?: string;
@@ -53,11 +222,11 @@ export async function generateAIMenuAction(input: GenerateAIMenuInput): Promise<
 
         // 3. Esegue la deduplicazione basata sul titolo del piatto per una lista pulita
         const uniquePastMeals = Array.from(
-            new Map(pastMeals.map((m) => [String(m.title).toLowerCase().trim(), m])).values()
+            new Map(pastMeals.map((m: any) => [String(m.title).toLowerCase().trim(), m])).values()
         );
 
         const formattedPastMeals = uniquePastMeals.length > 0
-            ? uniquePastMeals.map((m) => `- ${m.title}${m.description ? `: ${m.description}` : ""}`).join("\n")
+            ? uniquePastMeals.map((m: any) => `- ${m.title}${m.description ? `: ${m.description}` : ""}`).join("\n")
             : "Nessun pasto consumato di recente.";
 
         // 4. Verifica la chiave API di Groq
@@ -179,7 +348,7 @@ Pianifica accuratamente i pasti in base alla modalità selezionata.`;
         }
 
         // 7. Esegue una transazione database sicura per applicare il menu settimanale
-        await sql.begin(async (sql) => {
+        await sql.begin(async (sql: any) => {
             // A. Recupera o crea la settimana (weekly_menus)
             let menuId: string;
             const menus = await sql`
@@ -304,11 +473,11 @@ export async function suggestSingleMealAction(input: SuggestSingleMealInput): Pr
         `;
 
         const uniquePastMeals = Array.from(
-            new Map(pastMeals.map((m) => [String(m.title).toLowerCase().trim(), m])).values()
+            new Map(pastMeals.map((m: any) => [String(m.title).toLowerCase().trim(), m])).values()
         );
 
         const formattedPastMeals = uniquePastMeals.length > 0
-            ? uniquePastMeals.map((m) => `- ${m.title}${m.description ? `: ${m.description}` : ""}`).join("\n")
+            ? uniquePastMeals.map((m: any) => `- ${m.title}${m.description ? `: ${m.description}` : ""}`).join("\n")
             : "Nessun pasto consumato di recente.";
 
         const apiKey = process.env.GROQ_API_KEY;
@@ -428,7 +597,7 @@ export async function regenerateSingleMealAction(input: RegenerateSingleMealInpu
         `;
 
         const uniquePastMeals = Array.from(
-            new Map(pastMeals.map((m) => [String(m.title).toLowerCase().trim(), m])).values()
+            new Map(pastMeals.map((m: any) => [String(m.title).toLowerCase().trim(), m])).values()
         );
 
         // Fetch or create weekly menu ID
@@ -464,7 +633,7 @@ export async function regenerateSingleMealAction(input: RegenerateSingleMealInpu
         }
 
         const formattedPastMeals = [
-            ...uniquePastMeals.map((m) => `- ${m.title}${m.description ? `: ${m.description}` : ""}`),
+            ...uniquePastMeals.map((m: any) => `- ${m.title}${m.description ? `: ${m.description}` : ""}`),
             currentMealTitle ? `- ${currentMealTitle} (QUESTO pasto è attualmente inserito in questo giorno ed è quello da cambiare!)` : ""
         ].filter(Boolean).join("\n");
 
@@ -559,7 +728,7 @@ Struttura del JSON richiesto:
         const notes = parsed.notes ? String(parsed.notes).trim() : "";
 
         // Transactionally update the database
-        await sql.begin(async (sql) => {
+        await sql.begin(async (sql: any) => {
             // Elimina pasto precedente in questo slot
             await sql`
                 DELETE FROM meals 

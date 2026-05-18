@@ -1,0 +1,221 @@
+{
+  "users": [
+    {
+      "id": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "email": "test@example.com",
+      "password_hash": "$2b$10$MJ4lh07fOwQadVrJR8g4TeFfWDfMXB8PKLnMt64L3IBqZ95rM28vG",
+      "created_at": "2026-05-18T18:24:25.517Z",
+      "updated_at": "2026-05-18T18:24:25.517Z"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "name": "Andrea",
+      "avatar_url": null,
+      "created_at": "2026-05-18T18:24:25.518Z",
+      "updated_at": "2026-05-18T18:24:25.518Z"
+    }
+  ],
+  "families": [
+    {
+      "id": "bbd02997-7e3e-413b-b369-512d9b8bbb37",
+      "name": "Famiglia Andrea",
+      "invite_code": "PKRDPOB6",
+      "created_at": "2026-05-18T18:24:25.520Z",
+      "updated_at": "2026-05-18T18:24:25.520Z"
+    }
+  ],
+  "family_members": [
+    {
+      "id": "323d0602-1e40-42c3-9479-828b5f010eda",
+      "family_id": "bbd02997-7e3e-413b-b369-512d9b8bbb37",
+      "profile_id": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "role": "admin",
+      "color": "#f43f5e",
+      "joined_at": "2026-05-18T18:24:25.521Z"
+    }
+  ],
+  "weekly_menus": [
+    {
+      "id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "family_id": "bbd02997-7e3e-413b-b369-512d9b8bbb37",
+      "week_start": "2026-05-18",
+      "week_end": "2026-05-24",
+      "notes": null,
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.040Z",
+      "updated_at": "2026-05-18T18:24:47.040Z"
+    }
+  ],
+  "meals": [
+    {
+      "id": "5e289013-9569-40dd-9e95-0ddd1f2c672b",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 0,
+      "meal_type": "lunch",
+      "title": "Primo: Risotto allo Zafferano con scaglie di parmigiano | Secondo: Scaloppina al Limone",
+      "description": "Contorno: Asparagi al vapore — Risotto cremoso e fettine di vitello al limone.",
+      "notes": "Leggero e primaverile.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.040Z",
+      "updated_at": "2026-05-18T18:25:34.921Z"
+    },
+    {
+      "id": "b4eb4add-4887-46c0-9a59-72690724f56c",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 0,
+      "meal_type": "dinner",
+      "title": "Primo: Vellutata di Piselli | Secondo: Petto di Pollo alla Piastra",
+      "description": "Contorno: Fagiolini all'agro — Vellutata tiepida con crostini e petto di pollo aromatizzato alle erbe.",
+      "notes": "Cena detox e proteica.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.041Z",
+      "updated_at": "2026-05-18T18:24:47.041Z"
+    },
+    {
+      "id": "3d86104f-c558-47d9-839c-1b96f03c5e18",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 1,
+      "meal_type": "lunch",
+      "title": "Primo: Spaghetti alle Vongole | Secondo: Merluzzo alla Griglia",
+      "description": "Contorno: Insalatina di finocchi — Spaghetti freschi alle vongole e filetto di merluzzo con olio e limone.",
+      "notes": "Molto fresco.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.041Z",
+      "updated_at": "2026-05-18T18:24:47.041Z"
+    },
+    {
+      "id": "0e36a38b-0c72-4e1b-8b0d-63cc6349b794",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 1,
+      "meal_type": "dinner",
+      "title": "Primo: Tortiglioni al Ragù Bianco | Secondo: Polpette al Sugo",
+      "description": "Contorno: Melanzane a funghetto — Pasta condita con trito di verdure e carne, e polpettine classiche.",
+      "notes": "Molto sostanzioso.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.041Z",
+      "updated_at": "2026-05-18T18:24:47.041Z"
+    },
+    {
+      "id": "02cc0875-7532-4cd6-b2e0-0dc58719cda9",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 2,
+      "meal_type": "lunch",
+      "title": "Primo: Pennette all'Arrabbiata | Secondo: Uovo al Tegamino",
+      "description": "Contorno: Spinaci al burro — Pasta al pomodoro piccante e uova fresche al tegamino.",
+      "notes": "Rapido e saporito.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.041Z",
+      "updated_at": "2026-05-18T18:24:47.041Z"
+    },
+    {
+      "id": "0d6ac771-90b9-443a-8818-7dd922097fea",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 2,
+      "meal_type": "dinner",
+      "title": "Primo: Zuppa di Farro e Lenticchie | Secondo: Mozzarella di Bufala",
+      "description": "Contorno: Bieta ripassata — Zuppa tiepida di legumi e farro abbinata a mozzarella fresca.",
+      "notes": "Ricco di fibre e proteine.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.041Z",
+      "updated_at": "2026-05-18T18:24:47.041Z"
+    },
+    {
+      "id": "3a468ff4-621e-4781-abff-c577d5122d13",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 3,
+      "meal_type": "lunch",
+      "title": "Primo: Pasta e Fagioli | Secondo: Formaggio Fresco",
+      "description": "Contorno: Carotine saltate — Zuppa tradizionale di fagioli borlotti e formaggio tipo caciotta fresca.",
+      "notes": "Pasto nutriente e tradizionale.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.042Z",
+      "updated_at": "2026-05-18T18:24:47.042Z"
+    },
+    {
+      "id": "493ae77f-c752-4a6a-a0be-e5bd54e825af",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 3,
+      "meal_type": "dinner",
+      "title": "Primo: Pasta alla Carbonara di Zucchine | Secondo: Frittata di Patate",
+      "description": "Contorno: Insalata verde — Pasta con crema di zucchine e uovo, e soffice frittata.",
+      "notes": "Alternativa vegetariana alla carbonara.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.042Z",
+      "updated_at": "2026-05-18T18:24:47.042Z"
+    },
+    {
+      "id": "c75548dc-8e02-4bde-853f-cd7b220eaff1",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 4,
+      "meal_type": "lunch",
+      "title": "Primo: Gnocchi alla Sorrentina | Secondo: Spiedini di Pollo",
+      "description": "Contorno: Zucchine grigliate — Gnocchi al pomodoro e mozzarella filante con spiedini di pollo grigliati.",
+      "notes": "Molto amato dai bambini.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.042Z",
+      "updated_at": "2026-05-18T18:24:47.042Z"
+    },
+    {
+      "id": "fb05c6a7-2d27-4d11-82bd-89adeff451cd",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 4,
+      "meal_type": "dinner",
+      "title": "Primo: Cous Cous di Pesce | Secondo: Polipo all'insalata",
+      "description": "Contorno: Verdure al forno — Semola cotta al vapore con brodo di pesce e insalata di polpo tiepida.",
+      "notes": "Sapore di mare.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.042Z",
+      "updated_at": "2026-05-18T18:24:47.042Z"
+    },
+    {
+      "id": "e5b843e5-e59e-45a5-a286-5c8e6d0f06f4",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 5,
+      "meal_type": "lunch",
+      "title": "Primo: Riso Rosso con Verdure | Secondo: Torta Salata",
+      "description": "Contorno: Pomodori all'insalata — Riso integrale saltato con verdure miste e fetta di torta salata ricotta e spinaci.",
+      "notes": "Piatto unico vegetariano.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.043Z",
+      "updated_at": "2026-05-18T18:24:47.043Z"
+    },
+    {
+      "id": "2e124ecf-bec7-4fbb-97d6-beffc49cb56f",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 5,
+      "meal_type": "dinner",
+      "title": "Primo: Crema di Zucca e Zenzero | Secondo: Salmone al Cartoccio",
+      "description": "Contorno: Patate al forno — Crema saporita e trancio di salmone cotto al cartoccio con aromi.",
+      "notes": "Ricco di Omega-3.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.043Z",
+      "updated_at": "2026-05-18T18:24:47.043Z"
+    },
+    {
+      "id": "eea2f32d-57dd-46d4-b56d-0559d3c9cd8b",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 6,
+      "meal_type": "lunch",
+      "title": "Primo: Lasagne Leggere alle Zucchine | Secondo: Prosciutto Crudo",
+      "description": "Contorno: Insalata mista — Lasagna bianca con zucchine e scamorza abbinata a crudo dolce.",
+      "notes": "Perfetto per la domenica in famiglia.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.043Z",
+      "updated_at": "2026-05-18T18:24:47.043Z"
+    },
+    {
+      "id": "fb5007d3-d77b-4fe8-8635-15cd4a2ae4f6",
+      "weekly_menu_id": "d75ef441-6ca9-4688-acf3-8fe664fcb6ff",
+      "day_of_week": 6,
+      "meal_type": "dinner",
+      "title": "Primo: Minestrone Estivo | Secondo: Frittata con Erbe Spontanee",
+      "description": "Contorno: Verdure grigliate — Minestrone leggero con verdure fresche e frittata alle erbe.",
+      "notes": "Semplice e genuino.",
+      "created_by": "828051aa-bae1-4ab5-8a84-8aff592c7d56",
+      "created_at": "2026-05-18T18:24:47.043Z",
+      "updated_at": "2026-05-18T18:24:47.043Z"
+    }
+  ]
+}

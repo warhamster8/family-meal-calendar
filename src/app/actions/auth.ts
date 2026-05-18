@@ -105,7 +105,7 @@ export async function signupAction(formData: FormData): Promise<AuthResponse> {
         let familyId = "";
 
         // Execute sign up operations inside a safe transaction
-        await sql.begin(async (sql) => {
+        await sql.begin(async (sql: any) => {
             // 1. Create user record
             const [user] = await sql`
                 INSERT INTO users (email, password_hash)

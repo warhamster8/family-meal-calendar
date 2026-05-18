@@ -83,7 +83,7 @@ export async function saveMealAction(input: SaveMealInput): Promise<ActionRespon
     }
 
     try {
-        await sql.begin(async (sql) => {
+        await sql.begin(async (sql: any) => {
             // 1. Ensure the weekly menu exists for this family and week
             let menuId: string;
             const menus = await sql`

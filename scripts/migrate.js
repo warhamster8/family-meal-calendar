@@ -41,6 +41,33 @@ async function main() {
         process.exit(1);
     }
 
+    // Intercetta l'URL di placeholder per il Mock DB locale
+    if (databaseUrl.includes("placeholder")) {
+        console.log("🎮 Rilevato DATABASE_URL di test. Inizializzo il Mock DB locale...");
+        const dbDir = path.join(__dirname, "../.data");
+        if (!fs.existsSync(dbDir)) {
+            fs.mkdirSync(dbDir, { recursive: true });
+        }
+        const dbPath = path.join(dbDir, "db.json");
+        fs.writeFileSync(
+            dbPath,
+            JSON.stringify(
+                {
+                    users: [],
+                    profiles: [],
+                    families: [],
+                    family_members: [],
+                    weekly_menus: [],
+                    meals: [],
+                },
+                null,
+                2
+            )
+        );
+        console.log("✅ Mock DB locale reimpostato con successo!");
+        process.exit(0);
+    }
+
     // 2. Legge il file schema.sql
     const schemaPath = path.join(__dirname, "../supabase/schema.sql");
     if (!fs.existsSync(schemaPath)) {
